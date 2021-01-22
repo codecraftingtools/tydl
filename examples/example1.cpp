@@ -18,6 +18,11 @@ class Accessor {
         reinterpret_cast<uint8_t*>(this) + byte_offset) = value;
     return *reinterpret_cast<P*>(this);
   }
+  T operator=(const T &value) {
+    *reinterpret_cast<T*>(
+        reinterpret_cast<uint8_t*>(this) + byte_offset) = value;
+    return value;
+  }
 };
 
 template<class P, class T=P, size_t byte_offset=0>
@@ -26,6 +31,8 @@ class Field : public Accessor<P,T,byte_offset> {
   union {
     uint8_t bytes_[sizeof(T) + byte_offset];
   };
+ public:
+  using Accessor<P,T,byte_offset>::operator=;
 };
 
 } // namespace tydl
@@ -42,6 +49,7 @@ class tydl::Field<P,C,byte_offset> :
     Field<This_,uint32_t,byte_offset+0> c1;
     Field<This_,uint32_t,byte_offset+4> c2;
   };
+  using Accessor<P,C,byte_offset>::operator=;
 };
 
 class C : public tydl::Field<C> {};
@@ -58,6 +66,7 @@ class tydl::Field<P,D,byte_offset> :
     Field<This_,C,byte_offset+0> d1;
     Field<This_,C,byte_offset+8> d2;
   };
+  using Accessor<P,D,byte_offset>::operator=;
 };
 
 class D : public tydl::Field<D> {};
@@ -83,7 +92,10 @@ int main()
   cout << d.d1().c1() << " " << d.d1().c2() << endl;
   cout << d.d2().c1() << " " << d.d2().c2() << endl;
 
-  // This works also
+  d.d1 = c;
+  d.d2.c1 = 5;
+  
+  // This form works also
   cout << d.d1.c1() << " " << d.d1.c2() << endl;
   cout << d.d2.c1() << " " << d.d2.c2() << endl;
 
