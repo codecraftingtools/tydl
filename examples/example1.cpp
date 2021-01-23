@@ -37,67 +37,68 @@ class Field : public Accessor<P,T,byte_offset> {
 
 } // namespace tydl
 
-class C;
+class Child;
 
 template<class P, tydl::size_t byte_offset>
-class tydl::Field<P,C,byte_offset> :
-    public tydl::Accessor<P,C,byte_offset> {
+class tydl::Field<P,Child,byte_offset> :
+    public tydl::Accessor<P,Child,byte_offset> {
  public:
-  using Accessor<P,C,byte_offset>::operator=;
-  using This_ = tydl::Field<P,C,byte_offset>;
+  using Accessor<P,Child,byte_offset>::operator=;
+  using This_ = tydl::Field<P,Child,byte_offset>;
   Field() {bzero(this, sizeof(this));}
   union {
-    Field<This_,uint32_t,byte_offset+0> c1;
-    Field<This_,uint32_t,byte_offset+4> c2;
+    Field<This_,uint32_t,byte_offset+0> member1;
+    Field<This_,uint32_t,byte_offset+4> member2;
   };
 };
 
-class C : public tydl::Field<C> {};
+class Child : public tydl::Field<Child> {};
 
-class D;
+class Parent;
 
 template<class P, tydl::size_t byte_offset>
-class tydl::Field<P,D,byte_offset> :
-    public tydl::Accessor<P,D,byte_offset> {
+class tydl::Field<P,Parent,byte_offset> :
+    public tydl::Accessor<P,Parent,byte_offset> {
  public:
-  using Accessor<P,D,byte_offset>::operator=;
-  using This_ = tydl::Field<P,D,byte_offset>;
+  using Accessor<P,Parent,byte_offset>::operator=;
+  using This_ = tydl::Field<P,Parent,byte_offset>;
   Field() {bzero(this, sizeof(this));}
   union {
-    Field<This_,C,byte_offset+0> d1;
-    Field<This_,C,byte_offset+8> d2;
+    Field<This_,Child,byte_offset+0> child1;
+    Field<This_,Child,byte_offset+8> child2;
   };
 };
 
-class D : public tydl::Field<D> {};
+class Parent : public tydl::Field<Parent> {};
 
 int main()
 {
   using namespace std;
   
-  C c;
+  Child c;
   cout << sizeof(c) << endl;
-  c.c1(1)
-   .c2(2);
-  cout << c.c1() << " " << c.c2() << endl;
+  c.member1(1)
+   .member2(2);
+  cout << c.member1() << " " << c.member2() << endl;
   
-  D d;
-  d.d1.c1(3)
-      .c2(4)
-      .c2(44)
-      .c1(33);
-  d.d2.c1(5)
-      .c2(6);
-  d.d2(c);
-  cout << d.d1().c1() << " " << d.d1().c2() << endl;
-  cout << d.d2().c1() << " " << d.d2().c2() << endl;
+  Parent p;
+  p.child1.member1(3)
+          .member2(4)
+          .member2(44)
+          .member1(33);
+  p.child2.member1(5)
+          .member2(6);
+  p.child2(c);
+  
+  cout << p.child1().member1() << " " << p.child1().member2() << endl;
+  cout << p.child2().member1() << " " << p.child2().member2() << endl;
 
-  d.d1 = c;
-  d.d2.c1 = 5;
+  p.child1 = c;
+  p.child2.member1 = 5;
   
   // This form works also
-  cout << d.d1.c1() << " " << d.d1.c2() << endl;
-  cout << d.d2.c1() << " " << d.d2.c2() << endl;
+  cout << p.child1.member1() << " " << p.child1.member2() << endl;
+  cout << p.child2.member1() << " " << p.child2.member2() << endl;
 
   return 0;
 }
