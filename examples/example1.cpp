@@ -27,12 +27,12 @@ class Accessor {
 
 template<class P, class T=P, size_t byte_offset=0>
 class Field : public Accessor<P,T,byte_offset> {
+ public:
+  using Accessor<P,T,byte_offset>::operator=;
  protected:
   union {
     uint8_t bytes_[sizeof(T) + byte_offset];
   };
- public:
-  using Accessor<P,T,byte_offset>::operator=;
 };
 
 } // namespace tydl
@@ -43,13 +43,13 @@ template<class P, tydl::size_t byte_offset>
 class tydl::Field<P,C,byte_offset> :
     public tydl::Accessor<P,C,byte_offset> {
  public:
+  using Accessor<P,C,byte_offset>::operator=;
   using This_ = tydl::Field<P,C,byte_offset>;
   Field() {bzero(this, sizeof(this));}
   union {
     Field<This_,uint32_t,byte_offset+0> c1;
     Field<This_,uint32_t,byte_offset+4> c2;
   };
-  using Accessor<P,C,byte_offset>::operator=;
 };
 
 class C : public tydl::Field<C> {};
@@ -60,13 +60,13 @@ template<class P, tydl::size_t byte_offset>
 class tydl::Field<P,D,byte_offset> :
     public tydl::Accessor<P,D,byte_offset> {
  public:
+  using Accessor<P,D,byte_offset>::operator=;
   using This_ = tydl::Field<P,D,byte_offset>;
   Field() {bzero(this, sizeof(this));}
   union {
     Field<This_,C,byte_offset+0> d1;
     Field<This_,C,byte_offset+8> d2;
   };
-  using Accessor<P,D,byte_offset>::operator=;
 };
 
 class D : public tydl::Field<D> {};
