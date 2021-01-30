@@ -24,6 +24,13 @@ class Accessor {
         reinterpret_cast<uint8_t*>(this) + byte_offset) = value;
     return value;
   }
+  template<class P2, size_t byte_offset2=0>
+  T operator=(const Accessor<P2,T,byte_offset2> &a) {
+    auto value = a();
+    *reinterpret_cast<T*>(
+        reinterpret_cast<uint8_t*>(this) + byte_offset) = value;
+    return value;
+  }
 };
 
 } // namespace tydl

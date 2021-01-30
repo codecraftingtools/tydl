@@ -46,7 +46,8 @@ int main()
   cout << "    member2: " << p.child2().member2() << endl;
 
   // Use assignment operator
-  p.child2 = p.child1(); // Need parenthesis here
+  p.child2 = p.child1;   // This works
+  p.child2 = p.child1(); // So does this
   p.child1 = c;
   p.child2.member1 = 5;
   
