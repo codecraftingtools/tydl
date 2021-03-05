@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'Tydl'
-copyright = u'2020 Jeffrey A. Webb'
+copyright = u'2020, 2021 Jeffrey A. Webb'
 author = u'Jeffrey A. Webb'
 
 # The short X.Y version
@@ -181,4 +181,6 @@ epub_exclude_files = ['search.html']
 intersphinx_mapping = {'cc': ('https://www.codecraftsmen.org', None)}
 
 extlinks = {
-    'repo': ('https://github.com/codecraftingtools/tydl/blob/main/%s','')}
+    'github-repo': ('https://github.com/codecraftingtools/tydl/%s',''),
+    'repo': ('https://github.com/codecraftingtools/tydl/blob/main/%s','')
+}
