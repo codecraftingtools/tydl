@@ -1,69 +1,51 @@
 #ifndef TYDL_FIELD_HPP
 #define TYDL_FIELD_HPP
 
-#include <tydl/Accessor.hpp>
-#include <cstring> // memcpy
-
-namespace tydl::accessors {
-
-template<typename P, typename T=P, size_t byte_offset=0>
-class Field : public Accessor<T,Field<P,T,byte_offset>> {
- public:
-  ~Field() {}
-  Field() {}
-  Field(const Field &f) { (*this)(f()); }
-  Field(Field &&) = delete;
-  Field &operator=(const Field &f) { (*this)(f()); return *this; };
-  Field &operator=(Field &&) = delete;
-
-  Field(const T &t) { (*this)(t); }
-  template<typename F2>
-  Field(const Accessor<T,F2> &f) { (*this)(f()); }
-  
-  Field &operator=(const T &t) { (*this)(t); return *this; };
-  template<typename F2>
-  Field &operator=(const Accessor<T,F2> &a) {
-    typedef typename Accessor<T,F2>::Accessor_Subclass_ AA;
-    auto &f = *reinterpret_cast<const AA*>(&a);
-    (*this)(f());
-    return *this;
-  };
-      
-  const T &operator()() const {
-    return *reinterpret_cast<const T*>(
-        reinterpret_cast<const uint8_t*>(this) + byte_offset);
-  }
-  
-  P &operator()(const T &t) {
-    memcpy(reinterpret_cast<uint8_t*>(this) + byte_offset,
-           &t, number_of_bytes_in(t));
-    return *reinterpret_cast<P*>(this);
-  }
-  template<typename F2>
-  P &operator()(const Accessor<T,F2> &a) {
-    typedef typename Accessor<T,F2>::Accessor_Subclass_ AA;
-    auto &f = *reinterpret_cast<const AA*>(&a);
-    (*this)(f());
-    return *reinterpret_cast<P*>(this);
-  }
-};
-
-} // namespace tydl::accessors
+#include <tydl/functions.hpp>
 
 namespace tydl {
 
-template<typename P, typename T=P, size_t byte_offset=0>
-class Field : public accessors::Field<P,T,byte_offset> {
+template<class Parent, class Accessor=Parent>
+class Field : public Accessor {
  public:
-  using accessors::Field<P,T,byte_offset>::Field;
-  using accessors::Field<P,T,byte_offset>::operator=;
+  using typename Accessor::Type_;
+  using Accessor::set_;
+  using Accessor::get_;
   
   ~Field() {}
   Field() {}
-  Field(const Field &f) { (*this)(f()); }
+  Field(const Field &other) { set_(other); }
   Field(Field &&) = delete;
-  Field &operator=(const Field &f) { (*this)(f()); return *this; };
+  Field &operator=(const Field &other) { set_(other); return *this; };
   Field &operator=(Field &&) = delete;
+
+  Field(const Type_ &value) { set_(value); }
+  template<class Other_Parent, class Other_Accessor>
+  Field(const Field<Other_Parent,Other_Accessor> &other) { set_(other); }
+
+  Field &operator=(const Type_ &value) { set_(value); return *this; };
+  template<class Other_Parent, class Other_Accessor>
+  Field &operator=(const Field<Other_Parent,Other_Accessor> &other) {
+    set_(other);
+    return *this;
+  };
+  
+  const Type_ &operator()() const { return get_(); }
+  
+  Parent &operator()(const Type_ &value) {
+    set_(value);
+    return *reinterpret_cast<Parent*>(this);
+  }
+  template<class Other_Parent, class Other_Accessor>
+  Parent &operator()(const Field<Other_Parent,Other_Accessor> &other) {
+    set_(other);
+    return *reinterpret_cast<Parent*>(this);
+  }
+  
+  template<class Other_Parent, class Other_Accessor>
+  void set_(const Field<Other_Parent,Other_Accessor> &other) {
+    set_(other.get_());
+  }
 };
 
 } // namespace tydl

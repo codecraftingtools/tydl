@@ -2,52 +2,69 @@
 #define GENERATED_CHILD_HPP
 
 #include <tydl/Field.hpp>
+#include <tydl/Concrete.hpp>
 
 class Child;
 
 namespace tydl {
 
-template<>
-constexpr size_t max_number_of_bytes_in<Child>() { return 8; }
-
-template<typename P, size_t byte_offset>
-class Field<P,Child,byte_offset> :
-      public accessors::Field<P,Child,byte_offset>
+template<size_t byte_offset, size_t bit_offset>
+class Members<Child,byte_offset,bit_offset>
 {
  public:
-  using accessors::Field<P,Child,byte_offset>::Field;
-  using accessors::Field<P,Child,byte_offset>::operator=;
-  
-  ~Field() {}
-  Field() {}
-  Field(const Field &f) { (*this)(f()); }
-  Field(Field &&) = delete;
-  Field &operator=(const Field &f) { (*this)(f()); return *this; };
-  Field &operator=(Field &&) = delete;
+  ~Members() {}
+  Members() {}
+  Members(const Members &) = delete;
+  Members(Members &&) = delete;
+  Members &operator=(const Members &) = delete;
+  Members &operator=(Members &&) = delete;
 
-  using This_ = Field<P,Child,byte_offset>;
+  using member1_t_ = uint32_t;
+  using member2_t_ = uint32_t;
+  
   union {
-    Field<This_,uint32_t,byte_offset+0> member1;
-    Field<This_,uint32_t,byte_offset+sizeof(uint32_t)> member2;
+    Field<
+      Members,
+      Concrete<
+        member1_t_,
+        byte_offset,
+        bit_offset>
+      > member1;
+    Field<
+      Members,
+      Concrete<
+        member2_t_,
+        byte_offset + num_bytes_allocated_for<member1_t_>(),
+        bit_offset>
+      > member2;
   };
+
+  const static size_t num_allocated_bytes_ {
+    num_bytes_allocated_for<typeof(member1)>() +
+    num_bytes_allocated_for<typeof(member2)>()
+  };
+  
+  size_t get_num_bytes_() const {
+    return num_bytes_allocated_for<Child>();
+  }
 };
 
 } // namespace tydl
 
-class Child : public tydl::Field<Child> {
+class Child : public tydl::Field<tydl::Concrete<Child>> {
  public:
-  using tydl::Field<Child>::Field;
-  using tydl::Field<Child>::operator=;
+  using tydl::Field<tydl::Concrete<Child>>::Field;
+  using tydl::Field<tydl::Concrete<Child>>::operator=;
   
   ~Child() {}
-  Child() { memset(this, 0, tydl::max_number_of_bytes_in<Child>()); }
-  Child(const Child &o) { (*this)(o()); }
+  Child() { memset(this, 0, tydl::num_bytes_allocated_for<Child>()); }
+  Child(const Child &other) { set_(other); }
   Child(Child &&) = delete;
-  Child &operator=(const Child &o) { (*this)(o()); return *this; };
+  Child &operator=(const Child &other) { set_(other); return *this; };
   Child &operator=(Child &&) = delete;
   
  private:
-  uint8_t tydl_data_bytes_[tydl::max_number_of_bytes_in<Child>()-1];
+  uint8_t data_bytes_[num_allocated_bytes_-1];
 };
 
 #endif // GENERATED_CHILD_HPP
