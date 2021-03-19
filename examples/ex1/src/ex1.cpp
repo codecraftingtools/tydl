@@ -89,5 +89,8 @@ int main()
   p3.child2 = p.child1;
   print_parent(p3);
   
+  Child c4(p.child2);
+  print_child(c4);
+  
   return 0;
 }

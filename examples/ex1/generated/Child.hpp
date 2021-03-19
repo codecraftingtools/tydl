@@ -2,15 +2,14 @@
 #define GENERATED_CHILD_HPP
 
 #include <tydl/Field.hpp>
-#include <tydl/Concrete.hpp>
+#include <tydl/Record.hpp>
 
 class Child;
 
 namespace tydl {
 
-template<size_t byte_offset, size_t bit_offset>
-class Members<Child,byte_offset,bit_offset>
-{
+template<class Parent_Locator>
+class Members<Child,Parent_Locator> : public Sizing<Child> {
  public:
   ~Members() {}
   Members() {}
@@ -19,42 +18,19 @@ class Members<Child,byte_offset,bit_offset>
   Members &operator=(const Members &) = delete;
   Members &operator=(Members &&) = delete;
 
-  using member1_t_ = uint32_t;
-  using member2_t_ = uint32_t;
-  
   union {
-    Field<
-      Members,
-      Concrete<
-        member1_t_,
-        byte_offset,
-        bit_offset>
-      > member1;
-    Field<
-      Members,
-      Concrete<
-        member2_t_,
-        byte_offset + num_bytes_allocated_for<member1_t_>(),
-        bit_offset>
-      > member2;
+    Field<Members,uint32_t,Concrete,Relative<Parent_Locator,0>> member1;
+    Field<Members,uint32_t,Concrete,Relative<Parent_Locator,4>> member2;
+    uint8_t bytes_[4+4];
   };
-
-  const static size_t num_allocated_bytes_ {
-    num_bytes_allocated_for<typeof(member1)>() +
-    num_bytes_allocated_for<typeof(member2)>()
-  };
-  
-  size_t get_num_bytes_() const {
-    return num_bytes_allocated_for<Child>();
-  }
 };
 
 } // namespace tydl
 
-class Child : public tydl::Field<tydl::Concrete<Child>> {
+class Child : public tydl::Record<Child> {
  public:
-  using tydl::Field<tydl::Concrete<Child>>::Field;
-  using tydl::Field<tydl::Concrete<Child>>::operator=;
+  using tydl::Record<Child>::Record;
+  using tydl::Record<Child>::operator=;
   
   ~Child() {}
   Child() { memset(this, 0, tydl::num_bytes_allocated_for<Child>()); }
@@ -62,9 +38,6 @@ class Child : public tydl::Field<tydl::Concrete<Child>> {
   Child(Child &&) = delete;
   Child &operator=(const Child &other) { set_(other); return *this; };
   Child &operator=(Child &&) = delete;
-  
- private:
-  uint8_t data_bytes_[num_allocated_bytes_-1];
 };
 
 #endif // GENERATED_CHILD_HPP
