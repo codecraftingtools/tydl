@@ -3,6 +3,4 @@
 
 #include <tydl/functions.hpp>
 
-} // namespace tydl
-
 #endif // TYDL_HPP

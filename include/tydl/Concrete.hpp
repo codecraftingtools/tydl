@@ -6,8 +6,8 @@
 
 namespace tydl {
 
-template <typename Type, class Locator>
-class Concrete : public Members<Type,Locator> {
+template <typename Type, class Locator, class Sizer=Allocated_Size<Type>>
+class Concrete : public Members<Type,Locator,Sizer> {
  public:
   ~Concrete() {}
   Concrete() {}

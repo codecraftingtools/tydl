@@ -7,9 +7,8 @@
 class Child;
 
 namespace tydl {
-
-template<class Parent_Locator>
-class Members<Child,Parent_Locator> : public Sizing<Child> {
+template<class Locator, class Sizer>
+class Members<Child,Locator,Sizer> : public Sizing<Child,Sizer> {
  public:
   ~Members() {}
   Members() {}
@@ -19,8 +18,8 @@ class Members<Child,Parent_Locator> : public Sizing<Child> {
   Members &operator=(Members &&) = delete;
 
   union {
-    Field<Members,uint32_t,Concrete,Relative<Parent_Locator,0>> member1;
-    Field<Members,uint32_t,Concrete,Relative<Parent_Locator,4>> member2;
+    Field<Members,uint32_t,Concrete,Relative<Locator,0>> member1;
+    Field<Members,uint32_t,Concrete,Relative<Locator,4>> member2;
     uint8_t bytes_[4+4];
   };
 };

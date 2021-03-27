@@ -1,11 +1,11 @@
 #ifndef TYDL_SIZING_HPP
 #define TYDL_SIZING_HPP
 
-#include <tydl/functions.hpp>
+#include <tydl/locators.hpp>
 
 namespace tydl {
 
-template<typename Type>
+template<typename Type, class Sizer>
 class Sizing {
  public:
   ~Sizing() {}
@@ -18,7 +18,8 @@ class Sizing {
   const static size_t num_allocated_bytes_ { sizeof(Type) };
 
   size_t get_num_bytes_() const {
-    return num_bytes_allocated_for<Type>();
+    Sizer sizer;
+    return sizer(this);
   }
 };
 
