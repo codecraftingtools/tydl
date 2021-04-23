@@ -4,11 +4,11 @@
 Tydl
 ====
 
-Tydl is a type definition language for specifying the structure,
-layout, and semantic attributes of data types. The syntax is based on
-`Wumps`_. This project also aims to provide a set of tools that can be
-used to generate documentation or high-level code from type
-specifications.
+Tydl is a type definition language for specifying the structure, layout, and
+semantic attributes of data types. The language syntax is an extension of
+`Wumps`_.  In addition to defining the language itself, this software project
+aims to provide a set of tools that can be used to generate documentation or
+high-level code from type specifications written in the Tydl syntax.
 
 `Tydl`_ is part of the `Code Craftsmen`_ project.  The
 `documentation`_ is hosted on `Read the Docs`_ and the `source code`_
