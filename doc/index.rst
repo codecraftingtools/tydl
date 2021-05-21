@@ -1,3 +1,6 @@
+.. Copyright 2021 Jeffrey A. Webb
+   Copyright 2021 NTA, Inc.
+  
 .. Tydl documentation master file, created by
    sphinx-quickstart on Fri Nov  6 22:58:00 2020.
    You can adapt this file completely to your liking, but it should at least
@@ -12,4 +15,8 @@
    :maxdepth: 2
    :caption: Contents:
 
-   main
+   overview
+   status
+   getting_started
+   tutorial/tutorial
+
