@@ -1,3 +1,5 @@
+// Copyright 2021 Jeffrey A. Webb
+
 #ifndef GENERATED_STRUCT1_HPP
 #define GENERATED_STRUCT1_HPP
 

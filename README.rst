@@ -1,3 +1,6 @@
+.. Copyright 2020, 2021 Jeffrey A. Webb
+   Copyright 2021 NTA, Inc.
+
 ..  sphinx-include-summary-start
 
 ====

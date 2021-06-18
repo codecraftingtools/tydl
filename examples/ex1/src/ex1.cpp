@@ -1,3 +1,5 @@
+// Copyright 2021 Jeffrey A. Webb
+
 #include <generated/Parent.hpp>
 #include <generated/Child.hpp>
 #include <iostream>

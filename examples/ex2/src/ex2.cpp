@@ -1,3 +1,5 @@
+// Copyright 2021 Jeffrey A. Webb
+
 #include <generated/Struct2.hpp>
 #include <iostream>
 

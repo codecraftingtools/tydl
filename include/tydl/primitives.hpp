@@ -1,3 +1,5 @@
+// Copyright 2021 Jeffrey A. Webb
+
 #ifndef TYDL_PRIMITIVES_HPP
 #define TYDL_PRIMITIVES_HPP
 

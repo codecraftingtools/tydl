@@ -1,3 +1,5 @@
+// Copyright 2021 Jeffrey A. Webb
+
 #ifndef GENERATED_CHILD_HPP
 #define GENERATED_CHILD_HPP
 

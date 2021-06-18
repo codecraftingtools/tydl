@@ -1,3 +1,5 @@
+-- Copyright 2021 Jeffrey A. Webb
+
 import all: from: (Tydl, Tydl.Data.Types)
 
 Child: Record

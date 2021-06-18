@@ -1,3 +1,5 @@
+// Copyright 2021 Jeffrey A. Webb
+
 #ifndef TYDL_SUGAR_HPP
 #define TYDL_SUGAR_HPP
 
