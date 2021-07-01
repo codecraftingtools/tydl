@@ -37,10 +37,10 @@ The first goal of the Tydl project is to implement a language that allows
 semantic information to low-level details regarding the physical
 representation.  This may include information like field names, measurement
 units, numeric bounds (min/max), reference frame, default value, description,
-title, scale factor, bit/byte `endianness`_, custom attributes, etc.  Having
-all of this information in one place eases the software / documentation
-maintenence burden and reduces errors that stem from `duplicated
-information`_ not being kept in sync.
+title, scale factor, `endianness`_, `bit numbering`_, custom attributes, etc.
+Having all of this information in one place eases the software /
+documentation maintenence burden and reduces errors that stem from
+`duplicated information`_ not being kept in sync.
 
 In addition to providing a standardized and unified way of describing typical
 `data structures`_ (e.g. `arrays`_, `records`_, `bit fields`_ and `unions`_),
@@ -91,12 +91,18 @@ productivity.
 Command-Line Tool
 -----------------
 
-The final piece of the Tydl project is a common Python-based command-line
-tool for invoking the front-end parser and passing information to the
-back-end generators.
+The final piece of the Tydl project is a Python-based command-line tool for
+invoking the front-end parser and passing information to the back-end
+generators.
+
+.. image:: images/data_flow.*
+   :width: 100%
 
 .. _endianness:
      https://en.wikipedia.org/wiki/Endianness
+
+.. _bit numbering:
+     https://en.wikipedia.org/wiki/Bit_numbering
 
 .. _duplicated information:
      https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
