@@ -16,9 +16,9 @@ For our first example, let us consider a very simple data structure: a
    +--------+------------------------+
    | Field  | Type                   |
    +========+========================+
-   | a      | 8-Bit Unsigned Integer |
+   | first  | 8-Bit Unsigned Integer |
    +--------+------------------------+
-   | b      | 8-Bit Unsigned Integer |
+   | second | 8-Bit Unsigned Integer |
    +--------+------------------------+
 
 When stored in `byte-addressable`_ memory (e.g. RAM), the data structure
@@ -26,13 +26,13 @@ is layed out like this:
 
 .. table:: Memory Layout of Simple Data Structure
 
-   +-------------+---------+
-   | Byte Offset | Content |
-   +=============+=========+
-   | 0           | ``a``   |
-   +-------------+---------+
-   | 1           | ``b``   |
-   +-------------+---------+
+   +-------------+------------+
+   | Byte Offset | Content    |
+   +=============+============+
+   | 0           | ``first``  |
+   +-------------+------------+
+   | 1           | ``second`` |
+   +-------------+------------+
 
 A straight-forward Tydl declaration for this data structure can be
 constructed by creating a file named ``Simple.td`` containing:
@@ -45,25 +45,25 @@ constructed by creating a file named ``Simple.td`` containing:
 
   Simple: Record
     fields:
-      a: UInt8
-      b: UInt8
+      first:  UInt 8
+      second: UInt 8
 
 Without diving into every detail of the Tydl syntax, here is a brief
 explanation of this declaration:
 
 Line 1
   Import all declarations from the nested ``Tydl.Data`` namespace into file
-  scope.  The relevant declarations for this example are the ``Record``
-  and ``UInt8`` data types.
+  scope.  The relevant declarations for this example are the `Record
+  <Record>` and `UInt <UInt>` data types.
   
 Line 3
-  Declare a new Tydl data ``Record`` named ``Simple``.
+  Declare a new Tydl data `Record <Record>` named ``Simple``.
 
 Lines 4-6
-  The ``fields`` attribute of a data ``Record`` contains a list of key, value
-  pairs that specify the name and data type of each record member.  The order
-  in which the fields are listed determines the order they are stored in
-  memory, unless a location is explicitly specified.
+  The `fields <fields>` attribute of a data `Record <Record>` contains a list
+  of key-value pairs that specify the name and data type of each record
+  member.  The order in which the fields are listed determines the order they
+  are stored in memory, unless a location is explicitly specified.
 
 For those that prefer a more C-like syntax, the following alternative
 declaration is equivalent to the one above:
@@ -74,7 +74,7 @@ declaration is equivalent to the one above:
 
   import(all:, from: Tydl.Data);
    
-  Simple: Record {fields: {a: UInt8; b: UInt8}};
+  Simple: Record {fields: {first: UInt 8; second: UInt 8}};
   
 Hopefully, the declarations are readable, and the meaning intuitive.  Those
 who are curious can refer to the `Wumps <cc:wumps>` documentation to find
@@ -109,17 +109,17 @@ this ``Simple`` record might look like this:
     Simple s1, s2;
 
     // chained setters
-    s1.a(1)
-      .b(2);
+    s1.first(1)
+      .second(2);
 
     // assignment operators
-    s2.a = 10;
-    s2.b = s1.b;
+    s2.first = 10;
+    s2.second = s1.second;
     
     // getter
-    uint8_t a = s1.a();
+    uint8_t first = s1.first();
 
-    cout << a << endl;
+    cout << first << endl;
     return 0;
   }
 
@@ -140,22 +140,22 @@ structure: a `record`_ with nested fields.
    +--------+----------------------------+
 
 This record contains two instances of the ``Simple`` data structure described
-in the previous section.  When stored in `byte-addressable`_ memory
-(e.g. RAM), the data structure is layed out like this:
+in the previous section.  When stored in `byte-addressable`_ memory, the data
+structure is layed out like this:
 
 .. table:: Memory Layout of Nested Data Structure
 
-   +-------------+-----------------------+
-   | Byte Offset | Content               |
-   +=============+=======================+
-   | 0           | ``a`` Field of ``s1`` |
-   +-------------+-----------------------+
-   | 1           | ``b`` Field of ``s1`` |
-   +-------------+-----------------------+
-   | 2           | ``a`` Field of ``s2`` |
-   +-------------+-----------------------+
-   | 3           | ``b`` Field of ``s2`` |
-   +-------------+-----------------------+
+   +-------------+----------------------------+
+   | Byte Offset | Content                    |
+   +=============+============================+
+   | 0           | ``first``  Field of ``s1`` |
+   +-------------+----------------------------+
+   | 1           | ``second`` Field of ``s1`` |
+   +-------------+----------------------------+
+   | 2           | ``first``  Field of ``s2`` |
+   +-------------+----------------------------+
+   | 3           | ``second`` Field of ``s2`` |
+   +-------------+----------------------------+
 
 A Tydl declaration for this data structure might look like this:
 
@@ -191,21 +191,21 @@ structure* class is illustrated in the following C++ program:
     Simple s;
     
     // chained setters
-    n.s1.a(1)
-        .b(2);
-    s.a(3)
-     .b(4);
+    n.s1.first(1)
+        .second(2);
+    s.first(3)
+     .second(4);
     
     // assignment operators
-    n.s2.a = 5;
-    n.s2.b = n.s1.b;
+    n.s2.first = 5;
+    n.s2.second = n.s1.b;
     n.s1 = s;
   
     // getter
-    uint8_t a = n.s1.a();
+    uint8_t first = n.s1.first();
     s = n.s2();
     
-    cout << a << endl;
+    cout << first << endl;
     return 0;
   }
 
@@ -220,49 +220,49 @@ For our next example, let us consider another simple data structure: a
    +--------+----------------------------+
    | Field  | Type                       |
    +========+============================+
-   | a      | `16-Bit Unsigned Integer`_ |
+   | first  | `16-Bit Unsigned Integer`_ |
    +--------+----------------------------+
-   | b      | `16-Bit Unsigned Integer`_ |
+   | second | `16-Bit Unsigned Integer`_ |
    +--------+----------------------------+
 
-When stored in `byte-addressable`_ memory (e.g. RAM) on a little-`endian`_
-machine, the data structure is layed out like this:
+When stored in `byte-addressable`_ memory on a little-`endian`_ machine, the
+data structure is layed out like this:
 
 .. table:: Memory Layout of Simple2 Data Structure (Little-Endian)
 
-   +-------------+--------------------------------------------+
-   | Byte Offset | Content                                    |
-   +=============+============================================+
-   | 0           | Least-Significant Byte of ``a`` (Bits 7-0) |
-   +-------------+--------------------------------------------+
-   | 1           | Most-Significant Byte of ``a`` (Bits 15-8) |
-   +-------------+--------------------------------------------+
-   | 2           | Least-Significant Byte of ``b`` (Bits 7-0) |
-   +-------------+--------------------------------------------+
-   | 3           | Most-Significant Byte of ``b`` (Bits 15-8) |
-   +-------------+--------------------------------------------+
+   +-------------+-------------------------------------------------+
+   | Byte Offset | Content                                         |
+   +=============+=================================================+
+   | 0           | Least-Significant Byte of ``first`` (Bits 7-0)  |
+   +-------------+-------------------------------------------------+
+   | 1           | Most-Significant Byte of ``first`` (Bits 15-8)  |
+   +-------------+-------------------------------------------------+
+   | 2           | Least-Significant Byte of ``second`` (Bits 7-0) |
+   +-------------+-------------------------------------------------+
+   | 3           | Most-Significant Byte of ``second`` (Bits 15-8) |
+   +-------------+-------------------------------------------------+
 
-Note that when stored in `byte-addressable`_ memory (e.g. RAM) on a
-big-`endian`_ machine, the same data structure is layed out in a slightly
-different way:
+Note that when stored in `byte-addressable`_ memory on a big-`endian`_
+machine, the same data structure is layed out in a slightly different way:
 
 .. table:: Memory Layout of Simple2 Data Structure (Big-Endian)
 
-   +-------------+--------------------------------------------+
-   | Byte Offset | Content                                    |
-   +=============+============================================+
-   | 0           | Most-Significant Byte of ``a`` (Bits 15-8) |
-   +-------------+--------------------------------------------+
-   | 1           | Least-Significant Byte of ``a`` (Bits 7-0) |
-   +-------------+--------------------------------------------+
-   | 2           | Most-Significant Byte of ``b`` (Bits 15-8) |
-   +-------------+--------------------------------------------+
-   | 3           | Least-Significant Byte of ``b`` (Bits 7-0) |
-   +-------------+--------------------------------------------+
+   +-------------+-------------------------------------------------+
+   | Byte Offset | Content                                         |
+   +=============+=================================================+
+   | 0           | Most-Significant Byte of ``first`` (Bits 15-8)  |
+   +-------------+-------------------------------------------------+
+   | 1           | Least-Significant Byte of ``first`` (Bits 7-0)  |
+   +-------------+-------------------------------------------------+
+   | 2           | Most-Significant Byte of ``second`` (Bits 15-8) |
+   +-------------+-------------------------------------------------+
+   | 3           | Least-Significant Byte of ``second`` (Bits 7-0) |
+   +-------------+-------------------------------------------------+
 
 If we want to make sure that the data structure is stored or transmitted in a
 consistent way, regardless of the machine architecture, we can make use of
-the ``scalar_storage_order`` ``Record`` attribute, as shown below:
+the `scalar_storage_order <scalar_storage_order>` `Record <Record>`
+attribute, as shown below:
 
 .. code-block:: none
   :linenos:
@@ -274,14 +274,11 @@ the ``scalar_storage_order`` ``Record`` attribute, as shown below:
   Simple2: Record
     scalar_storage_order: most_significant_first
     fields:
-      a: UInt16
-      b: UInt16
+      first: UInt 16
+      second: UInt 16
 
-If the ``scalar_storage_order`` attribute is not specified, then the
-machine's native byte order will be used for efficiency.  The name of this
-attribute (the `scalar`_ part, in particular) was chosen for consistency with
-the equivalent `Ada Scalar Storage Order`_ and `GCC scalar_storage_order type
-attribute`_ constructs.
+If the `scalar_storage_order <scalar_storage_order>` attribute is not
+specified, then the machine's native byte order will be used for efficiency.
 
 Record with Floating-Point Fields
 =================================
@@ -306,8 +303,8 @@ found in the Wikipedia article:
 .. image:: ../images/ieee_754_single_float.*
    :width: 100%
 
-When stored in `byte-addressable`_ memory (e.g. RAM) on a little-`endian`_
-machine, the data structure is layed out like this:
+When stored in `byte-addressable`_ memory on a little-`endian`_ machine, the
+data structure is layed out like this:
 
 .. table:: Memory Layout of Coordinates Data Structure (Little-Endian)
 
@@ -350,8 +347,8 @@ Once again, the Tydl declaration is straight-forward:
   Coordinates: Record
     scalar_storage_order: least_significant_first
     fields:
-      x: Float32
-      y: Float32
+      x: Float 32
+      y: Float 32
 
 .. _record:
     https://en.wikipedia.org/wiki/Record_(computer_science)
@@ -367,15 +364,6 @@ Once again, the Tydl declaration is straight-forward:
 
 .. _endian:
     https://en.wikipedia.org/wiki/Endianness
-
-.. _Ada Scalar Storage Order:
-    https://gcc.gnu.org/onlinedocs/gcc-4.8.5/gnat_rm/Scalar_005fStorage_005fOrder.html
-
-.. _scalar:
-    https://en.cppreference.com/w/cpp/types/is_scalar
-
-.. _GCC scalar_storage_order type attribute:
-    https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html
 
 .. _IEEE 754 Single-Precision Floating-Point:
     https://en.wikipedia.org/wiki/Single-precision_floating-point_format

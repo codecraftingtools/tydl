@@ -43,14 +43,14 @@ documentation maintenence burden and reduces errors that stem from
 `duplicated information`_ not being kept in sync.
 
 In addition to providing a standardized and unified way of describing typical
-`data structures`_ (e.g. `arrays`_, `records`_, `bit fields`_ and `unions`_),
-Tydl also aspires to support the definition of more sophisticated types than
-are available in most mainstream programming languages.  This includes items
-like `tagged unions`_, discontiguous (pieced-together) fields,
-variable-length arrays, "sliding" fields whose location may move (i.e. they
-follow variable-length fields), fields with derived values (e.g. checksums),
-conditional fields (may or may not appear), transformed fields (e.g. scaled
-integers), etc.
+`data structures`_ (e.g. `arrays`_, `records`_, `enumerations`_, `bit
+fields`_ and `unions`_), Tydl also aspires to support the definition of more
+sophisticated types than are available in most mainstream programming
+languages.  This includes items like `tagged unions`_, discontiguous
+(pieced-together) fields, variable-length arrays, "sliding" fields whose
+location may move (i.e. they follow variable-length fields), fields with
+derived values (e.g. checksums), conditional fields (may or may not appear),
+transformed fields (e.g. scaled integers), etc.
 
 Front End
 ---------
@@ -115,6 +115,9 @@ generators.
 
 .. _records:
     https://en.wikipedia.org/wiki/Record_(computer_science)
+
+.. _enumerations:
+    https://en.wikipedia.org/wiki/Enumerated_type
 
 .. _bit fields:
     https://en.wikipedia.org/wiki/Bit_field
