@@ -229,6 +229,26 @@ fields
   Convenience definition, equivalent to a `Record <Record>` with a
   `scalar_storage_order <scalar_storage_order>` of ``most_significant_first``.
 
+.. _Tagged Union:
+
+Tagged Union
+============
+
+Composite `Type <Type>` representing a `tagged data union`_ of multiple
+`Records <Record>`. Unlike a standard `union`_, the specific subtype of a
+tagged union can be determined from a field (or *tag*) embedded in the data
+structure itself.  The following attributes are supported:
+
+of
+  List of `Record <Record>` subtypes that instances of this tagged union can
+  represent.  All of the records listed here should be derived from a common
+  base type.
+
+tag
+  Common `Field <Field>` that can be used to distinguish (or discriminate)
+  which of the subtypes specified by the ``of`` attribute should be used to
+  represent a particular instance of this tagged union.
+
 .. _Array:
 
 Array
@@ -362,6 +382,9 @@ to a `UInt <UInt>` with a `bit_width <bit_width>` of ``1``.
     
 .. _union:
     https://en.wikipedia.org/wiki/Union_type
+
+.. _tagged data union:
+    https://en.wikipedia.org/wiki/Tagged_union
 
 .. _endianness:
     https://en.wikipedia.org/wiki/Endianness
