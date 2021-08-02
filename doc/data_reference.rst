@@ -249,6 +249,11 @@ tag
   which of the subtypes specified by the ``of`` attribute should be used to
   represent a particular instance of this tagged union.
 
+fallbacks
+  Ordered list of fallback types to use if none of the listed subtypes are
+  applicable.  The types that appear earlier in the list have higher
+  precedence.
+  
 .. _Array:
 
 Array
