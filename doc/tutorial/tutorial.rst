@@ -198,7 +198,7 @@ structure* class is illustrated in the following C++ program:
     
     // assignment operators
     n.s2.first = 5;
-    n.s2.second = n.s1.b;
+    n.s2.second = n.s1.second;
     n.s1 = s;
   
     // getter
