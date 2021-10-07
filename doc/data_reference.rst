@@ -7,8 +7,8 @@ Data Types
 ==========
 
 This section documents the data type entities provided by Tydl and describes
-the attributes that are applicable to each specific entity.  These entities
-are defined in the ``Tydl.Data`` namespace.
+the attributes that are applicable to each one.  These entities are defined
+in the ``Tydl.Data`` namespace.
 
 .. _Type:
 
@@ -20,9 +20,10 @@ Base entity for all Tydl data types, including composite (e.g. `Arrays
 attributes are supported:
 
 abbreviations
-  List of text substitutions definitions (e.g. `macros <macro>`, `short
-  <short>`) that can be used in the definitions of other attributes in this
-  entity.  This list attribute is considered *extensible* by derived classes.
+  List of text substitutions definitions (e.g. `macros <macro>`, ``short``)
+  that can be used in the definitions of other attributes in this entity.
+  This list attribute is considered *appendable* by extensions of this
+  entity.
   
 bit_numbering
   Indicates the `bit numbering`_ convention adopted by this data type.  Valid
@@ -209,7 +210,7 @@ fields
   arguments that are to be interpreted as Field attributes.  The order in
   which the fields are listed determines the order they are stored in memory
   unless a location is explicitly specified. This list attribute is
-  considered *extensible* by derived classes.
+  considered *appendable* by extensions of this entity.
 
 .. comment
    
@@ -241,8 +242,8 @@ structure itself.  The following attributes are supported:
 
 of
   List of `Record <Record>` subtypes that instances of this tagged union can
-  represent.  All of the records listed here should be derived from a common
-  base type.
+  represent.  All of the records listed here should be extensions of a common
+  base entity.
 
 tag
   Common `Field <Field>` that can be used to distinguish (or discriminate)
@@ -311,7 +312,8 @@ values
 
 as
   Concrete type used to represent the encoded values.  Typically, the default
-  value for this attribute (`UInt <UInt>`) is sufficient.
+  value for this attribute (`Unsigned Integer <Unsigned Integer>`) is
+  sufficient.
 
 bit_width
   This attribute determines the number of bits used in the representation of
@@ -327,7 +329,7 @@ reserved
 spare
   Explicit list of spare encodings that are not currently being used.
 
-.. _UInt:
+.. _Unsigned Integer:
 
 Unsigned Integer (UInt)
 =======================
@@ -360,10 +362,10 @@ floating-point values of a specific size.  For concrete types, the `bit_width
 first positional argument.  The ``bit_width`` for floating point numbers may
 be ``32`` or ``64``.
 
-.. _Bit:
+.. _Bool:
 
-Boolean (Bool)
-==============
+Boolean Value (Bool)
+====================
 
 Primitive data `Type <Type>` representing `boolean`_ values that are stored
 as integers of a specific size.  A *true* value is represented as ``1`` and a
@@ -373,11 +375,14 @@ indicates the number of bits used for storage, otherwise an
 implementation-dependent number of bits may be used.  The ``bit_width`` for
 boolean values may range from 1 to 64.
 
+.. _Bit:
+
 Bit
 ===
 
 Primitive data `Type <Type>` representing a single bit.  This is equivalent
-to a `UInt <UInt>` with a `bit_width <bit_width>` of ``1``.
+to an `Unsigned Integer <Unsigned Integer>` with a `bit_width <bit_width>` of
+``1``.
 
 .. _data array:
     https://en.wikipedia.org/wiki/Array_data_structure

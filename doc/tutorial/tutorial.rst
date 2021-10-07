@@ -5,6 +5,8 @@
 Tutorial
 ========
 
+.. _Simple Data Structure:
+
 Simple Record
 =============
 
@@ -13,13 +15,13 @@ For our first example, let us consider a very simple data structure: a
 
 .. table:: Simple Data Structure
    
-   +--------+------------------------+
-   | Field  | Type                   |
-   +========+========================+
-   | first  | 8-Bit Unsigned Integer |
-   +--------+------------------------+
-   | second | 8-Bit Unsigned Integer |
-   +--------+------------------------+
+   +--------+----------------------------+
+   | Field  | Type                       |
+   +========+============================+
+   | First  | `8-Bit Unsigned Integer`_  |
+   +--------+----------------------------+
+   | Second | `8-Bit Unsigned Integer`_  |
+   +--------+----------------------------+
 
 When stored in `byte-addressable`_ memory (e.g. RAM), the data structure
 is layed out like this:
@@ -29,9 +31,9 @@ is layed out like this:
    +-------------+------------+
    | Byte Offset | Content    |
    +=============+============+
-   | 0           | ``first``  |
+   | 0           | ``First``  |
    +-------------+------------+
-   | 1           | ``second`` |
+   | 1           | ``Second`` |
    +-------------+------------+
 
 A straight-forward Tydl declaration for this data structure can be
@@ -41,49 +43,152 @@ constructed by creating a file named ``Simple.td`` containing:
   :linenos:
   :caption: Simple.td
   
-  import all: from: Tydl.Data
+  import
+    identifiers: all
+    from:
+      Tydl
+      Tydl.Data
 
   Simple: Record
     fields:
-      first:  UInt 8
-      second: UInt 8
+      First: Field
+        type: 'Unsigned Integer'
+          bit_width: 8
+      Second: Field
+        type: 'Unsigned Integer'
+          bit_width: 8
 
-Without diving into every detail of the Tydl syntax, here is a brief
-explanation of this declaration:
+Although this is not the place for us to discuss every nuance of the Tydl
+syntax, it would be helpful to spend some time stepping through this
+declaration line-by-line.
+
+Lines 1-5
+  The first statement is an `import <import>` directive that brings all the
+  identifiers declared in the ``Tydl`` and ``Tydl.Data`` namespaces into file
+  scope.  The relevant identifiers for this example are ``Record``, ``Field``
+  and ``Unsigned Integer``.  The syntax construct used to represent
+  directives, referred to as a *call*, is also used to represent function
+  calls, macro invocations, and data type specializations or extensions.  A
+  *call* consists of an identifier followed by an indented list of key-value
+  pairs, one per line, that represent the *arguments* passed to the
+  directive, function, macro, etc.
+
+  .. code-block:: none
+    :linenos:
+    
+    import
+      identifiers: all
+      from:
+        Tydl
+        Tydl.Data
 
 Line 1
-  Import all declarations from the nested ``Tydl.Data`` namespace into file
-  scope.  The relevant declarations for this example are the `Record
-  <Record>` and `UInt <UInt>` data types.
-  
-Line 3
-  Declare a new Tydl data `Record <Record>` named ``Simple``.
+  The presence of an identifier followed by a series of indented lines
+  indicates that the entity corresponding to the identifier should be
+  *called*.  In this case, the ``import`` identifier corresponds to a
+  built-in directive, and *calling* it translates to executing the directive.
 
-Lines 4-6
-  The `fields <fields>` attribute of a data `Record <Record>` contains a list
-  of key-value pairs that specify the name and data type of each record
-  member.  The order in which the fields are listed determines the order they
+Line 2
+  The indentation indicates that this line should be interpreted an argument
+  to the `import <import>` directive.  It consists of a *key* (i.e. an
+  identifier followed by a colon) representing the name of the argument being
+  specified followed by the value for that argument.  In the context of the
+  `import <import>` directive, the ``identifiers`` argument is used to
+  indicate the identifiers that should be imported from the specified
+  namespace.  This argument may be either a single identifier or a list of
+  identifiers.  Passing in the identifier ``all`` (as is done here) is a
+  special case that indicates everything declared in the specified namespaces
+  should be imported.
+
+Line 3
+  The presence of a key (in this case ``from``) followed by a series of
+  indented lines indicates that a list is being supplied as the argument
+  value.  In general, the ``from`` argument may be either a single (possibly
+  dotted) identifier, or a list of identifiers indicating the source
+  namespaces that identifiers will be imported from.
+
+Line 4-5
+  List of namespaces that identifiers will be imported from.  The period
+  (``.`` character) is referred to as the *member operator*, and in this case
+  indicates that the ``Data`` namespace being referenced is nested under the
+  parent ``Tydl`` namespace.
+  
+Lines 7-14
+  This statement declares a new specialized data `Record <Record>` named
+  ``Simple``.
+
+  .. code-block:: none
+    :linenos:
+    :lineno-start: 7
+   
+    Simple: Record
+      fields:
+        First: Field
+          type: 'Unsigned Integer'
+            bit_width: 8
+        Second: Field
+          type: 'Unsigned Integer'
+            bit_width: 8
+          
+Line 7
+  The presence of a key-value pair at file scope indicates that the specified
+  value (in this case, a specialized data `Record <Record>` entity) should be
+  added to the namespace associated with this file (in this case, the root
+  namespace) under the name specified by the key (in this case ``Simple``).
+  The following indented lines indicate the *call* construct, which in the
+  case of a data type like `Record <Record>`, indicates that the arguments
+  are to be interpreted as *attributes* that specialize, constrain, or extend
+  the data type in some way.  This is similar to specifying class `template`_
+  arguments in C++.
+
+Lines 8
+  The `fields <fields>` attribute of a data `Record <Record>` is a list of
+  key-value pairs that specify the names and properties of each member in the
+  record.  The order in which the fields are listed determines the order they
   are stored in memory, unless a location is explicitly specified.
 
-For those that prefer a more C-like syntax, the following alternative
-declaration is equivalent to the one above:
+Lines 9, 12
+  Each value in the list of key-value pairs is typically a `Field <Field>`
+  entity.  The corresponding keys indicate the field names.  In this case,
+  our data record has two fields, named ``First`` and ``Second``.
+
+Lines 10, 13
+  The ``type`` attribute of a `Field <Field>` specifies the data type of the
+  field.  The use of single quotes are required to reference the names of a
+  *complex identifiers* that have unusual characters (in this case, spaces)
+  in the name.  Simple aliases (e.g. ``UInt``) for many entities are
+  available for those who find this naming convention objectionable.
+
+Lines 11, 14
+  The ``bit_width`` attribute of an `Unsigned Integer <Unsigned Integer>`
+  entity specifies the number of bits used to represent the associated value.
+
+Now that we have discussed this example in detail, you will hopefully find
+the rest of the declarations in this tutorial readable, and the meaning
+intuitive, even though you may not understand all the details of the syntax
+at this point.  Those who are curious can refer to the `Wumps <cc:wumps>`
+documentation to find more detailed information on the low-level syntax that
+serves as a foundation for the Tydl language.
+
+It is also worth noting that although this tutorial favors the use of more
+verbose, explicit formatting for clarity, there are alternative, more compact
+ways of expressing things.  The following declaration, for example, is
+equivalent to the one we just discussed above:
 
 .. code-block:: none
   :linenos:
   :caption: Simple.td (Alternate Syntax)
 
-  import(all:, from: Tydl.Data);
+  import all from: (Tydl, Tydl.Data)
    
-  Simple: Record {fields: {first: UInt 8; second: UInt 8}};
+  Simple: Record
+    fields:
+      First:  UInt 8
+      Second: UInt 8
   
-Hopefully, the declarations are readable, and the meaning intuitive.  Those
-who are curious can refer to the `Wumps <cc:wumps>` documentation to find
-more detailed information on the low-level syntax that serves as a foundation
-for the Tydl language.
-
-Now that we have described our data structure using the Tydl syntax, we can
-use the ``tydl`` command-line tool to generate a C++ *smart structure* class
-that implements this type::
+Now that we have described our data structure using the Tydl syntax, the next
+step is to use the ``tydl`` command-line tool to generate a C++ *smart
+structure* class that implements this type::
 
   tydl --generate=cpp_class --entity=Simple Simple.td
 
@@ -93,7 +198,7 @@ This results in the following directory tree being created::
       └── Simple.hpp
 
 A C++ program that utilizes the auto-generated *smart structure* class for
-this ``Simple`` record might look like this:
+this ``Simple`` record might look something like this:
 
 .. code-block:: c++
   :linenos:
@@ -106,25 +211,38 @@ this ``Simple`` record might look like this:
   {
     using namespace std;
 
+    // instantiation
     Simple s1, s2;
 
+    // functional setters
+    s1.First(1)
+    s1.Second(2)
+    
     // chained setters
-    s1.first(1)
-      .second(2);
+    s1.First(1)
+      .Second(2);
+
+    // explicit setters
+    tydl::set(s1.First, 1);
+    tydl::set(s1.Second, 2);
 
     // assignment operators
-    s2.first = 10;
-    s2.second = s1.second;
+    s2.First = 10;
+    s2.Second = s2.First;
     
-    // getter
-    uint8_t first = s1.first();
+    // functional getter
+    uint8_t first = s1.First();
 
-    cout << first << endl;
+    // explicit getter
+    uint8_t second = tydl::get(s1.Second);
+       
+    cout << first << " " << second << endl;
+    
     return 0;
   }
 
-Record with Nested Fields
-=========================
+Nested Fields
+=============
 
 For our second example, let us consider a slightly more complex data
 structure: a `record`_ with nested fields.
@@ -134,9 +252,9 @@ structure: a `record`_ with nested fields.
    +--------+----------------------------+
    | Field  | Type                       |
    +========+============================+
-   | s1     | ``Simple`` Data Structure  |
+   | S1     | `Simple Data Structure`_   |
    +--------+----------------------------+
-   | s2     | ``Simple`` Data Structure  |
+   | S2     | `Simple Data Structure`_   |
    +--------+----------------------------+
 
 This record contains two instances of the ``Simple`` data structure described
@@ -148,27 +266,33 @@ structure is layed out like this:
    +-------------+----------------------------+
    | Byte Offset | Content                    |
    +=============+============================+
-   | 0           | ``first``  Field of ``s1`` |
+   | 0           | ``First``  field of ``S1`` |
    +-------------+----------------------------+
-   | 1           | ``second`` Field of ``s1`` |
+   | 1           | ``Second`` field of ``S1`` |
    +-------------+----------------------------+
-   | 2           | ``first``  Field of ``s2`` |
+   | 2           | ``First``  field of ``S2`` |
    +-------------+----------------------------+
-   | 3           | ``second`` Field of ``s2`` |
+   | 3           | ``Second`` field of ``S2`` |
    +-------------+----------------------------+
 
-A Tydl declaration for this data structure might look like this:
+A Tydl declaration for this data structure can be written as follows:
 
 .. code-block:: none
   :linenos:
   :caption: Nested.td
   
-  import all: from: Tydl.Data
+  import
+    identifiers: all
+    from:
+      Tydl
+      Tydl.Data
 
   Nested: Record
     fields:
-      s1: Simple
-      s2: Simple
+      S1: Field
+        type: Simple
+      S2: Field
+        type: Simple
 
 This declaration assumes that the Tydl definition of the ``Simple`` data
 structure from the previous section is also available.
@@ -191,26 +315,26 @@ structure* class is illustrated in the following C++ program:
     Simple s;
     
     // chained setters
-    n.s1.first(1)
-        .second(2);
-    s.first(3)
-     .second(4);
+    n.S1.First(1)
+        .Second(2);
+    s.First(3)
+     .Second(4);
     
     // assignment operators
-    n.s2.first = 5;
-    n.s2.second = n.s1.second;
-    n.s1 = s;
-  
-    // getter
-    uint8_t first = n.s1.first();
-    s = n.s2();
+    n.S2.First = 5;
+    n.S2.Second = n.S1.Second;
+    n.S1 = s;
+
+    // functional getters
+    uint8_t First = n.S1.First();
+    s = n.S2();
     
-    cout << first << endl;
+    cout << First << endl;
     return 0;
   }
 
-Record with Multi-Byte Fields
-=============================
+Multi-Byte Fields
+=================
 
 For our next example, let us consider another simple data structure: a
 `record`_ with two multi-byte fields.
@@ -220,9 +344,9 @@ For our next example, let us consider another simple data structure: a
    +--------+----------------------------+
    | Field  | Type                       |
    +========+============================+
-   | first  | `16-Bit Unsigned Integer`_ |
+   | First  | `16-Bit Unsigned Integer`_ |
    +--------+----------------------------+
-   | second | `16-Bit Unsigned Integer`_ |
+   | Second | `16-Bit Unsigned Integer`_ |
    +--------+----------------------------+
 
 When stored in `byte-addressable`_ memory on a little-`endian`_ machine, the
@@ -233,13 +357,13 @@ data structure is layed out like this:
    +-------------+-------------------------------------------------+
    | Byte Offset | Content                                         |
    +=============+=================================================+
-   | 0           | Least-Significant Byte of ``first`` (Bits 7-0)  |
+   | 0           | Least-Significant Byte of ``First`` (Bits 7-0)  |
    +-------------+-------------------------------------------------+
-   | 1           | Most-Significant Byte of ``first`` (Bits 15-8)  |
+   | 1           | Most-Significant Byte of ``First`` (Bits 15-8)  |
    +-------------+-------------------------------------------------+
-   | 2           | Least-Significant Byte of ``second`` (Bits 7-0) |
+   | 2           | Least-Significant Byte of ``Second`` (Bits 7-0) |
    +-------------+-------------------------------------------------+
-   | 3           | Most-Significant Byte of ``second`` (Bits 15-8) |
+   | 3           | Most-Significant Byte of ``Second`` (Bits 15-8) |
    +-------------+-------------------------------------------------+
 
 Note that when stored in `byte-addressable`_ memory on a big-`endian`_
@@ -250,13 +374,13 @@ machine, the same data structure is layed out in a slightly different way:
    +-------------+-------------------------------------------------+
    | Byte Offset | Content                                         |
    +=============+=================================================+
-   | 0           | Most-Significant Byte of ``first`` (Bits 15-8)  |
+   | 0           | Most-Significant Byte of ``First`` (Bits 15-8)  |
    +-------------+-------------------------------------------------+
-   | 1           | Least-Significant Byte of ``first`` (Bits 7-0)  |
+   | 1           | Least-Significant Byte of ``First`` (Bits 7-0)  |
    +-------------+-------------------------------------------------+
-   | 2           | Most-Significant Byte of ``second`` (Bits 15-8) |
+   | 2           | Most-Significant Byte of ``Second`` (Bits 15-8) |
    +-------------+-------------------------------------------------+
-   | 3           | Least-Significant Byte of ``second`` (Bits 7-0) |
+   | 3           | Least-Significant Byte of ``Second`` (Bits 7-0) |
    +-------------+-------------------------------------------------+
 
 If we want to make sure that the data structure is stored or transmitted in a
@@ -267,21 +391,29 @@ attribute, as shown below:
 .. code-block:: none
   :linenos:
   :caption: Simple2.td
-  :emphasize-lines: 4
+  :emphasize-lines: 8
   
-  import all: from: Tydl.Data
+  import
+    identifiers: all
+    from:
+      Tydl
+      Tydl.Data
 
   Simple2: Record
     scalar_storage_order: most_significant_first
     fields:
-      first: UInt 16
-      second: UInt 16
-
+      First: Field
+        type: 'Unsigned Integer'
+          bit_width: 16
+      Second: Field
+        type: 'Unsigned Integer'
+          bit_width: 16
+          
 If the `scalar_storage_order <scalar_storage_order>` attribute is not
 specified, then the machine's native byte order will be used for efficiency.
 
-Record with Floating-Point Fields
-=================================
+Floating-Point Fields
+=====================
 
 In this example, let us consider yet another simple data structure: a
 `record`_ with two 32-bit floating-point fields, stored in little-`endian`_
@@ -292,9 +424,9 @@ format.
    +--------+---------------------------------------------+
    | Field  | Type                                        |
    +========+=============================================+
-   | x      | `IEEE 754 Single-Precision Floating-Point`_ |
+   | X      | `IEEE 754 Single-Precision Floating-Point`_ |
    +--------+---------------------------------------------+
-   | y      | `IEEE 754 Single-Precision Floating-Point`_ |
+   | Y      | `IEEE 754 Single-Precision Floating-Point`_ |
    +--------+---------------------------------------------+
 
 The details of the `IEEE 754 Single-Precision Floating-Point`_ format can be
@@ -311,44 +443,53 @@ data structure is layed out like this:
    +-------------+------------------------------------------------------+
    | Byte Offset | Content                                              |
    +=============+======================================================+
-   | 0           | Least-Significant Byte of ``x``                      |
+   | 0           | Least-Significant Byte of ``X``                      |
    |             | (Fraction Bits 7-0)                                  |
    +-------------+------------------------------------------------------+
-   | 1           | 2nd Least-Significant Byte of ``x``                  |
+   | 1           | 2nd Least-Significant Byte of ``X``                  |
    |             | (Fraction Bits 15-8)                                 |
    +-------------+------------------------------------------------------+
-   | 2           | 2nd Most-Significant Byte of ``x``                   |
+   | 2           | 2nd Most-Significant Byte of ``X``                   |
    |             | (Exponent Bit 0, Fraction Bits 22-16)                |
    +-------------+------------------------------------------------------+
-   | 3           | Most-Significant Byte of ``x``                       |
+   | 3           | Most-Significant Byte of ``X``                       |
    |             | (Sign Bit, Exponent Bits 7-1)                        |
    +-------------+------------------------------------------------------+
-   | 4           | Least-Significant Byte of ``y``                      |
+   | 4           | Least-Significant Byte of ``Y``                      |
    |             | (Fraction Bits 7-0)                                  |
    +-------------+------------------------------------------------------+
-   | 5           | 2nd Least-Significant Byte of ``y``                  |
+   | 5           | 2nd Least-Significant Byte of ``Y``                  |
    |             | (Fraction Bits 15-8)                                 |
    +-------------+------------------------------------------------------+
-   | 6           | 2nd Most-Significant Byte of ``y``                   |
+   | 6           | 2nd Most-Significant Byte of ``Y``                   |
    |             | (Exponent Bit 0, Fraction Bits 22-16)                |
    +-------------+------------------------------------------------------+
-   | 7           | Most-Significant Byte of ``y``                       |
+   | 7           | Most-Significant Byte of ``Y``                       |
    |             | (Sign Bit, Exponent Bits 7-1)                        |
    +-------------+------------------------------------------------------+
 
-Once again, the Tydl declaration is straight-forward:
+Once again, constructing a Tydl declaration with two `Floating Point Values
+<Float>` is straight-forward:
 
 .. code-block:: none
   :linenos:
   :caption: Coordinates.td
   
-  import all: from: Tydl.Data
+  import
+    identifiers: all
+    from:
+      Tydl
+      Tydl.Data
 
   Coordinates: Record
     scalar_storage_order: least_significant_first
     fields:
-      x: Float 32
-      y: Float 32
+      X: Field
+        type: 'Floating-Point Value'
+          bit_width: 32
+      Y: Field
+        type: 'Floating-Point Value'
+          bit_width: 32
 
 .. _record:
     https://en.wikipedia.org/wiki/Record_(computer_science)
@@ -356,9 +497,15 @@ Once again, the Tydl declaration is straight-forward:
 .. _byte:
     https://en.wikipedia.org/wiki/Integer_(computer_science)#Bytes_and_octets
 
+.. _8-Bit Unsigned Integer:
+    https://en.wikipedia.org/wiki/Integer_(computer_science)#Bytes_and_octets
+
 .. _byte-addressable:
     https://en.wikipedia.org/wiki/Byte_addressing
 
+.. _template:
+    https://en.wikipedia.org/wiki/Template_%28C%2B%2B%29
+    
 .. _16-Bit Unsigned Integer:
     https://en.wikipedia.org/wiki/Integer_(computer_science)#Short_integer
 

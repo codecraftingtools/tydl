@@ -6,201 +6,348 @@
 Basic Functionality
 ===================
 
-This section documents the general-purpose commands defined in the ``Tydl``
-namespace and describes the parameters that are applicable to each one.
+This section documents the general-purpose entities and directives defined in
+the ``Tydl`` namespace and describes the attributes and parameters that are
+applicable to each one.
 
-import
+.. _Alias:
+
+Alias
+=====
+
+`Parameterized Entity <Parameterized>` used explictly define an alias
+(i.e. an alternate name) for a value.  This is useful in situations where the
+usual method of creating an implicit alias (i.e. just assigning multiple
+names to the same value) may not be possible, such as in parameter lists.
+
+The following keyword parameters may be used to specify attributes of this
+entity:
+
+aliasee
+  `Entity <Entity>` to be aliased.
+
+for
+  Alias for ``aliasee``.
+
+.. comment
+   
+   Field Alias
+   
+   This type of alias also adds the capability of overriding some less
+   significant attributes (e.g. visibility or documentation-related items) of
+   the aliased entity with alternate values.
+    
+   Other keyword parameters may be supplied, and their usage may depend on
+   what type of alias this is (e.g. a `Field <Field>` alias).
+
+.. _Attribute:
+
+Attribute
+=========
+
+Special type of `Parameter <Parameter>` representing an entity attribute
+(i.e. an ``Attribute`` is used to specify a property of an ``Entity``).
+
+The following keyword parameters may be used to specify attributes of this
+``Attribute`` entity:
+
+type
+  Type of `Entity <Entity>` that may be assigned to this ``Attribute``.  If
+  no type is specified, then any type of ``Entity`` is acceptable.
+
+positional
+  `Boolean Value <Bool>` specifying whether or not values for this
+  ``Attribute`` may be passed to an ``Entity`` specialization *call* as a
+  positional argument.  The default value for this parameter is ``false``.
+  If ``true`` is specified, then the value for this ``Attribute`` may be
+  passed as a positional argument following any other positional arguments
+  that occur before this one in the attribute list defined by the parent
+  ``Entity``.
+
+.. _Callable:
+
+Callable Entity
+===============
+
+Extension of `Entity <Entity>` that serves as a base for entities that are
+*callable*.
+
+.. _Directive:
+
+Directive
+=========
+
+Extension of `Callable Entity <Callable>` that serves as a base for built-in
+entities that influence how Tydl source files are parsed, processed, and
+evaluated.
+
+.. _Entity:
+
+Entity
 ======
 
-Imports entities from a specified namespace into the current one.  Note that
-this special, fundamental command is automatically imported into every
-namespace to bootstrap the import process.  The following parameters are
-accepted:
+Fundamental entity that serves as a base for all other entities.
 
-all
-  If this parameter is specified with no value (or is explicitly set to
-  ``true``), all entities from the specified namespace will be imported into
-  the current one.  This option should be used with care.  In general, it
-  should only be used with common, well-known definitions.  If ``all`` is
-  specified, then a specific ``entity`` or list of ``entities`` should not be
-  specified.
+All entities have the following attributes:
 
-entities
-  This parameter specifies the entity name (or list of names) to import into
-  the current namespace.  This parameter may be specified as a keyword
-  argument, or as the first positional argument if ``from`` is explicitly
-  specified.
+attributes
+  Ordered list of key-value pairs that defines the additional attributes
+  associated with this entity, aside from ``attributes`` itself.  The keys in
+  the list indicate the names of the attributes, and the values specify the
+  types of entities permissible for each attribute and possibly other
+  attribute-specific properties, such as extendability, mutability, and
+  argument position.  Each value may be either an `Attribute <Attribute>` or
+  another type of ``Entity``, depending on whether or not any of the
+  optional, attribute-specific properties are required.  If a key with no
+  value is specified, then the type of value that can be assigned to an
+  attribute is not constrained.  Derived entities (extensions) may append
+  attributes to the end of this list.
 
-entity
-  Alias for ``entities``.
-
-from
-  Specifies the namespace that the entities will be imported from.  If a
-  specific ``entity`` or list of ``entities`` is not specified, then a list
-  of namespaces is also acceptable.  If ``all`` and ``entities`` are both
-  omitted, then the specified fully qualified (dotted) namespace itself is
-  imported for use in the current namespace.  In this case, ``from`` may be
-  specified using the first positional argument.
+.. _file:
 
 file
 ====
 
-Specifies properties related to the current file being processed.  The
-following parameters are accepted:
+`Directive <Directive>` used to specify attributes related to the file
+currently being processed.
+
+The following keyword parameters are accepted:
 
 namespace
-  Namespace in which any named entities declared in the current file will be
-  stored.  If no namespace is specified, then the top-level (root) namespace
-  will be used.
+  Namespace identifier (possibly dotted) specifying the namespace into which
+  any named entities declared in the current file will be stored.  If no
+  namespace is specified, then the root namespace will be used.
 
-extended
-========
+.. _import:
 
-Creates a new derived entity that inherits from, or *extends*, an existing
-(base) entity.  Extending means that an instance of the new entity can be
-treated as instance of the base entity, but may have additional properties or
-appended data.  The new entity may define new attributes or append additional
-elements to existing list attributes (if they are *extensible*).  The
-following parameters are accepted:
+import
+======
 
-base
-  Base entity to be extended.  This parameter may be specified as a keyword
-  argument or as the first positional argument.
+`Directive <Directive>` used to import entities declared in other namespaces
+into the calling one.  Note that this special, fundamental directive is
+automatically imported into the namespace of every file to bootstrap the
+import process.
 
-Additional keyword arguments are used to append elements to *extensible* list
-attributes that are defined in the base entity or to define new attributes
-that do not exist in the base entity.
+The following keyword parameters are accepted:
+  
+from
+  Alias for ``source`` or ``sources`` (if list).
+  
+identifier
+  Singular alias for ``identifiers``
+  
+identifiers
+  List of (possibly dotted) identifiers to be imported into the calling
+  namespace, or the single identifier ``all``.
+
+  If this parameter is set to ``all``, everything declared in each of the
+  namespaces specified by the ``sources`` parameter will be imported.  Please
+  note, however, that this feature should be used with care to avoid
+  polluting the calling namespace by unintentionally importing unwanted
+  identifiers.  In general, ``all`` should only be specified when importing
+  common, well-known definitions, such as the ones found in the ``Tydl`` and
+  ``Tydl.Data`` namespaces.
+
+  If the ``sources`` parameter is not specified, ``identifiers`` is expected
+  to be a list of namespace identifiers that may be explicitly referenced in
+  the calling namespace.
+  
+source
+  Singular alias for ``sources``
+
+sources
+  List of (possibly dotted) namespace identifiers that specify the namespaces
+  from which the indicated ``identifiers`` will be imported.  Only one
+  namespace identifier may be specified unless the ``identifiers`` parameter
+  is set to ``all``.
+
+The following positional parameters are accepted:
+
+.. table::
+   
+   +-------------------+----------------------------------------------+
+   | Argument Position | Parameter                                    |
+   +===================+==============================================+
+   | 1st               | ``identifier`` or ``identifiers`` (if list)  |
+   +-------------------+----------------------------------------------+
 
 .. _macro:
 
 macro
 =====
 
-Defines a parameterized expression that is to be substituted wherever it is
-invoked.  The following parameters are accepted:
+`Directive <Directive>` use to define a parameterized expression that is to
+be evaluated in the context of the calling location.  When the ``Macro``
+entity returned by this directive is called, the value of each argument
+passed into the *call* will be substituted in place of the associated
+parameter name wherever it occurs in the macro body expression, and then the
+resulting expression will substituted in place of the ``Macro`` call.
+
+The following keyword parameters are accepted:
 
 parameters
-  List of arguments that are to be passed into the macro when it is invoked
-  and substituted into the macro body expression.  This parameter may be
-  specified as a keyword argument or as the first positional argument.
+  Ordered list of key-value pairs specifying the parameters that may be
+  passed into the ``Macro`` when it is called.  The keys in the list indicate
+  the names of the parameters, and the values specify the types of entities
+  permissible for each parameter and possibly other parameter-specific
+  attributes, such as argument position.  Each value may be either a
+  `Parameter <Parameter>` or another type of `Entity <Entity>`, depending on
+  whether or not any of the optional, parameter-specific attributes are
+  required.  If a key with no value is specified, then the type of value that
+  can be passed into the associated parameter is not constrained.
 
 body
-  Expression to be substituted in place of the macro wherever it is invoked.
-  Identifiers in the parameter list are replaced with the passed-in values
-  wherever they appear in the body expression.
+  Expression that is to be substituted in place of the ``Macro`` when it is
+  called.  Identifiers in the parameter list are replaced with the passed-in
+  values wherever they appear in the body expression.
 
 is
    Alias for ``body``.
 
-.. _specifier:
+The following positional parameters are accepted:
 
-specifier
+.. table::
+   
+   +-------------------+----------------------------------------------+
+   | Argument Position | Parameter                                    |
+   +===================+==============================================+
+   | 1st               | ``parameters``                               |
+   +-------------------+----------------------------------------------+
+   
+.. _Parameter:
+
+Parameter
 =========
 
-Provides a mechanism to essentially create a macro or entity alias that also
-adds additional keyword arguments to any invocation of the alias.  The
-following parameters are accepted:
+`Parameterized Entity <Parameterized>` representing a *call* parameter used
+to pass data to a *callee*.
 
-first positional argument
-  The macro or entity that is to be "aliased".
+The following keyword parameters may be used to specify attributes of this
+entity:
 
-Additional keyword arguments passed to ``specifier`` are interpreted as
-additional arguments that are to be passed to the "aliased" macro or entity
-whenever the specifier instance that is being defined is invoked.
+type
+  Type of `Entity <Entity>` that may be passed to a *callee* through this
+  ``Parameter``.  If no type is specified, then any type of value is
+  acceptable.
 
-.. _function:
+positional
+  `Boolean Value <Bool>` specifying whether or not values for this
+  ``Parameter`` may be passed to the *callee* as a positional argument.  The
+  default value for this parameter is ``false``.  If ``true`` is specified,
+  then the value for this ``Parameter`` may be passed as a positional
+  argument following any other positional arguments that occur before this
+  one in the parameter list defined by the *callee*.
 
-function
-========
+.. _Parameterized:
 
-Defines a parameterized function that returns a typed value.  The following
-parameters are accepted:
+Parameterized Entity
+====================
 
-body
-  List of statements to be executed during a function call.  When a `return
-  <return>` command is encountered, execution of the function stops and the
-  result of the `return <return>` call is returned to the caller.
+Extension of `Callable Entity <Callable>` that serves as a base for entities,
+that when called, return *specialized* versions of themselves.  The arguments
+passed to a *call* are interpreted as attribute specifiers for the
+``Entity``.
 
-is
-  Alias for ``body``.
-
-of
-  Alias for ``parameters``.
-
-parameters
-  List of arguments that are to be passed into the function when it is
-  invoked.  If a list of key-value pairs is supplied, the keys represent the
-  parameter names and the values represent the data `Types <Type>` for the
-  associated parameters.  This parameter may be specified as a keyword
-  argument or as the first positional argument.
-
-returns
-  Data `Type <Type>` of the value returned by this function.
-
-.. _return:
-
-return
-======
-
-Command used to return a value from a function to the caller.  The following
-parameters are accepted:
-
-first positional argument
-  The value to be returned to the caller.
-
-.. _short:
-
-short
-=====
-
-Command used to define a shorthand notation for an expression.  This is a
-simpler version of a `macro <macro>` that is not parameterized.  The
-following parameters are accepted:
-
-for
-  Expression to be substituted in place of the ``short`` wherever it is
-  invoked.
-
-if
-==
-
-Command that conditionally evaluates to one expression or another if invoked.
-The following parameters are accepted:
-
-condition
-  The boolean expression that determines what will be returned.  This
-  parameter may be specified as a keyword argument or as the first positional
-  argument.
-
-then
-  The expression to return if the ``condition`` is true.
-
-else
-  The expression to return if the ``condition`` is false.  If this parameter
-  is not specified, then an empty list will be returned.
-
-is_specified
-============
-
-Command that returns ``true`` if the data instance passed in as the first
-positional argument has been assigned a value and ``false`` if it has not.
-
-
-.. _alias:
-
-alias
-=====
-
-Command that may be used to define an alias in places where the normal method
-of just assigning another name to a value is not supported (e.g. parameter
-lists).  This type of alias also has the capability of overriding some less
-significant attributes of the aliased entity with fixed values.  This
-functionality is similar to the functionality provided by the `specifier
-<specifier>` command, and maybe these could be combined somehow in the
-future.  The following parameters are accepted:
-
-for
-  The entity to be aliased.
-
-Other keyword parameters may be supplied, and their usage may depend on what
-type of alias this is (e.g. a `Field <Field>` alias).
+.. extended
+   ========
+    
+   Creates a new derived entity that inherits from, or *extends*, an existing
+   (base) entity.  Extending means that an instance of the new entity can be
+   treated as instance of the base entity, but may have additional properties
+   or appended data.  The new entity may define new attributes or append
+   additional elements to existing list attributes (if they are
+   *extensible*).  The following parameters are accepted:
+    
+   base
+     Base entity to be extended.  This parameter may be specified as a
+     keyword argument or as the first positional argument.
+    
+   Additional keyword arguments are used to append elements to *extensible*
+   list attributes that are defined in the base entity or to define new
+   attributes that do not exist in the base entity.
+    
+.. specifier
+   =========
+    
+   Provides a mechanism to essentially create a macro or entity alias that
+   also adds additional keyword arguments to any invocation of the alias.
+   The following parameters are accepted:
+    
+   first positional argument
+     The macro or entity that is to be "aliased".
+    
+   Additional keyword arguments passed to ``specifier`` are interpreted as
+   additional arguments that are to be passed to the "aliased" macro or
+   entity whenever the specifier instance that is being defined is invoked.
+    
+   function
+   ========
+    
+   Defines a parameterized function that returns a typed value.  The
+   following parameters are accepted:
+    
+   body
+     List of statements to be executed during a function call.  When a
+     `return <return>` command is encountered, execution of the function
+     stops and the result of the `return <return>` call is returned to the
+     caller.
+    
+   is
+     Alias for ``body``.
+    
+   of
+     Alias for ``parameters``.
+    
+   parameters
+     List of arguments that are to be passed into the function when it is
+     invoked.  If a list of key-value pairs is supplied, the keys represent
+     the parameter names and the values represent the data `Types <Type>` for
+     the associated parameters.  This parameter may be specified as a keyword
+     argument or as the first positional argument.
+    
+   returns
+     Data `Type <Type>` of the value returned by this function.
+    
+   return
+   ======
+    
+   Command used to return a value from a function to the caller.  The
+   following parameters are accepted:
+    
+   first positional argument
+     The value to be returned to the caller.
+    
+   short
+   =====
+    
+   Command used to define a shorthand notation for an expression.  This is a
+   simpler version of a `macro <macro>` that is not parameterized.  The
+   following parameters are accepted:
+    
+   for
+     Expression to be substituted in place of the ``short`` wherever it is
+     invoked.
+    
+   if
+   ==
+    
+   Command that conditionally evaluates to one expression or another if
+   invoked.  The following parameters are accepted:
+    
+   condition
+     The boolean expression that determines what will be returned.  This
+     parameter may be specified as a keyword argument or as the first
+     positional argument.
+    
+   then
+     The expression to return if the ``condition`` is true.
+    
+   else
+     The expression to return if the ``condition`` is false.  If this
+     parameter is not specified, then an empty list will be returned.
+    
+   is_specified
+   ============
+    
+   Command that returns ``true`` if the data instance passed in as the first
+   positional argument has been assigned a value and ``false`` if it has not.
