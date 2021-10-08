@@ -160,8 +160,8 @@ Lines 10, 13
   available for those who find this naming convention objectionable.
 
 Lines 11, 14
-  The ``bit_width`` attribute of an `Unsigned Integer <Unsigned Integer>`
-  entity specifies the number of bits used to represent the associated value.
+  The ``bit_width`` attribute of an `Unsigned Integer <UInt>` entity
+  specifies the number of bits used to represent the associated value.
 
 Now that we have discussed this example in detail, you will hopefully find
 the rest of the declarations in this tutorial readable, and the meaning

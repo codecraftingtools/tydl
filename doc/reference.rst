@@ -4,8 +4,8 @@
 Reference
 =========
 
-The following sections describe the various categories of entities and
-directives provided by Tydl.
+The following sections describe the various categories of entities,
+directives, and commands provided by Tydl.
 
 .. toctree::
    :maxdepth: 1

@@ -6,9 +6,9 @@
 Basic Functionality
 ===================
 
-This section documents the general-purpose entities and directives defined in
-the ``Tydl`` namespace and describes the attributes and parameters that are
-applicable to each one.
+This section documents the general-purpose entities, directives, and commands
+defined in the ``Tydl`` namespace and describes the attributes or parameters
+that are applicable to each one.
 
 .. _Alias:
 
@@ -64,10 +64,20 @@ positional
   that occur before this one in the attribute list defined by the parent
   ``Entity``.
 
+.. _Command:
+
+Command
+=======
+
+Extension of `Callable Entity <Callable>` that serves as a base for custom
+instructions that are evaluated as a file is parsed and processed.  One
+primary use case is macros.  A *callable* ``Command`` must be instantiated
+from a `Macro <Macro>` entity before it can be invoked.
+
 .. _Callable:
 
-Callable Entity
-===============
+Callable Entity (Callable)
+==========================
 
 Extension of `Entity <Entity>` that serves as a base for entities that are
 *callable*.
@@ -176,30 +186,48 @@ The following positional parameters are accepted:
 macro
 =====
 
-`Directive <Directive>` use to define a parameterized expression that is to
-be evaluated in the context of the calling location.  When the ``Macro``
-entity returned by this directive is called, the value of each argument
+`Command <Command>` that, in a single statement, defines a `Macro <Macro
+Entity>` entity and instantiates a *callable* ``Command`` instance from that
+``Macro``.  Any arguments passed into the the ``macro`` command are simply
+passed along to the underlying ``Macro`` entity specialization.
+
+.. _Macro Entity:
+
+Macro
+=====
+
+`Parameterized Entity <Parameterized>` representing a parameterized
+expression that is to be evaluated in the context of the calling location.
+When a `Command <Command>` instance created from a ``Macro`` entity (usually
+created via the ``macro`` command) is called, the value of each argument
 passed into the *call* will be substituted in place of the associated
 parameter name wherever it occurs in the macro body expression, and then the
-resulting expression will substituted in place of the ``Macro`` call.
+resulting expression will substituted in place of the call.
 
-The following keyword parameters are accepted:
+.. note::
+  In almost all cases, ``Macro`` entities are created and instantiated at the
+  same time using the ``macro`` command.
+
+The following keyword parameters may be used to specify attributes of this
+entity:
 
 parameters
   Ordered list of key-value pairs specifying the parameters that may be
-  passed into the ``Macro`` when it is called.  The keys in the list indicate
-  the names of the parameters, and the values specify the types of entities
-  permissible for each parameter and possibly other parameter-specific
-  attributes, such as argument position.  Each value may be either a
-  `Parameter <Parameter>` or another type of `Entity <Entity>`, depending on
-  whether or not any of the optional, parameter-specific attributes are
-  required.  If a key with no value is specified, then the type of value that
-  can be passed into the associated parameter is not constrained.
+  passed into a `Command <Command>` instance created from this ``Macro`` when
+  the command is called.  The keys in the list indicate the names of the
+  parameters, and the values specify the types of entities permissible for
+  each parameter and possibly other parameter-specific attributes, such as
+  argument position.  Each value may be either a `Parameter <Parameter>` or
+  another type of `Entity <Entity>`, depending on whether or not any of the
+  optional, parameter-specific attributes are required.  If a key with no
+  value is specified, then the type of value that can be passed into the
+  associated parameter is not constrained.
 
 body
-  Expression that is to be substituted in place of the ``Macro`` when it is
-  called.  Identifiers in the parameter list are replaced with the passed-in
-  values wherever they appear in the body expression.
+  Expression that is to be substituted in place of the `Command <Command>`
+  instance created from this ``Macro`` when it is called.  Identifiers in the
+  parameter list are replaced with the passed-in values wherever they appear
+  in the body expression.
 
 is
    Alias for ``body``.
@@ -240,13 +268,13 @@ positional
 
 .. _Parameterized:
 
-Parameterized Entity
-====================
+Parameterized Entity (Parameterized)
+====================================
 
 Extension of `Callable Entity <Callable>` that serves as a base for entities,
 that when called, return *specialized* versions of themselves.  The arguments
-passed to a *call* are interpreted as attribute specifiers for the
-``Entity``.
+passed when calling a ``Parameterized Entity`` are interpreted as attribute
+specifiers for the ``Entity``.
 
 .. extended
    ========
