@@ -273,9 +273,27 @@ Parameterized Entity (Parameterized)
 
 Extension of `Callable Entity <Callable>` that serves as a base for entities,
 that when called, return *specialized* versions of themselves.  The arguments
-passed when calling a ``Parameterized Entity`` are interpreted as attribute
-specifiers for the ``Entity``.
+passed when calling a ``Parameterized Entity`` are interpreted as specifiers
+for existing ``Entity`` attributes, except in the following two special
+cases:
 
+constrains
+  Ordered list of key-value pairs specifying *constraints* for existing
+  attributes.  The difference between *constraints* and *specifiers* is that
+  a *specifier* must fully specify an attribute value, while a *constraint*
+  may be used to partially specify an attribute value (i.e. specify
+  attributes of attributes).  The keys in the list indicate the names of the
+  attributes to be constrained, and the values may be either a fully
+  specified value (i.e. the constraint may be a specifier), or a nested list
+  of key-value pairs specifying the attributes of the attribute being
+  constrained.
+
+appends
+  Ordered list of key-value pairs specifying values that should be appended
+  to existing list attributes.  The keys in the list indicate names of
+  existing list attributes, and the values are expected to be lists
+  containing the values to be appended to each of the corresponding lists.
+  
 .. extended
    ========
     

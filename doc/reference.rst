@@ -13,5 +13,4 @@ directives, and commands provided by Tydl.
    basic_reference
    data_reference
    supp_data_reference
-   modifier_reference
    operation_reference

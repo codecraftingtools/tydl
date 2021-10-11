@@ -62,6 +62,42 @@ Bit
 Primitive data `Type <Type>` representing a single bit.  This is equivalent
 to an `Unsigned Integer <UInt>` with a ``bit_width`` of ``1``.
 
+.. _Bit-Field Word:
+
+Bit-Field Word
+==============
+
+Hybrid `Unsigned Integer <UInt>` / `Bit <Bit>` `Array <Array>` data type with
+some specialized features.  It can be thought of as an extension of `Record
+<Record>` with a single `Field <Field>` named ``Bits``.  A declaration would
+look something like this:
+
+.. code-block:: none
+
+  'Bit-Field Word':  Record
+    fields:
+      Bits: Field
+        type: Array
+          element_type: Bit
+          length: bit_width
+        hidden: true
+
+The ``Bits`` array, however, is indexed according to the applicable
+``bit_numbering`` and ``bit_range_order`` attributes.
+
+In addition to being used as a ``Record``, this data type also can be used as an ``Unsigned Integer``.
+
+The ``text_format`` attribute is also overridden so that ``Bit-Field Word``
+values are shown as hexadecimal unsigned integers by default.
+
+The following keyword parameters may be used to specify attributes of this
+entity:
+
+bit_width
+  Alias for `bit_count <bit_count>`.  This attribute indicates the number of
+  bits used for storage and should be specified for concrete types.  The
+  ``bit_width`` for bit-field words typically ranges from 1 to 64.
+
 .. _Bool:
 
 Boolean Value (Boolean/Bool)
@@ -97,8 +133,10 @@ Enumeration (Enumerated/Enum)
 
 Primitive data `Type <Type>` implementing `enumerations`_.  This data type
 provides a way to encode a set of abstract, symbolic identifiers (i.e.
-*choices*) as a set of concrete, numeric (typically integer) values.  The
-following attributes are supported:
+*choices*) as a set of concrete, numeric (typically integer) values.
+
+The following keyword parameters may be used to specify attributes of this
+entity:
 
 as
   Alias for ``representation``.
@@ -176,6 +214,35 @@ The following positional parameters are accepted:
    +===================+==============================================+
    | 1st               | ``bit_width``                                |
    +-------------------+----------------------------------------------+
+
+.. _Quantity:
+
+Quantity (Quantified)
+=====================
+
+Adds a ``units`` attribute to the specified base `Type <Type>`.
+
+The following keyword parameters may be used to specify attributes of this
+entity:
+
+numeric_type
+  The base `Type <Type>` to be extended.
+
+units
+  The units associated with this data `Type <Type>`.  Identifiers
+  corresponding to most standard units may be found in the ``Tydl.Units``
+  namespace.  Abbreviations for these units may be found in the
+  ``Tydl.Units.Abbreviations`` namespace.
+
+The following positional parameters are accepted:
+
+.. table::
+   
+   +-------------------+----------------------------------------------+
+   | Argument Position | Parameter                                    |
+   +===================+==============================================+
+   | 1st               | ``numeric_type``                             |
+   +-------------------+----------------------------------------------+
    
 .. _Record:
 
@@ -183,8 +250,10 @@ Record
 ======
 
 Composite `Type <Type>` representing a `data record`_ (i.e. C/C++ structure
-or `union`_) with named `Fields <Field>`.  The following attributes are
-supported:
+or `union`_) with named `Fields <Field>`.
+
+The following keyword parameters may be used to specify attributes of this
+entity:
 
 default_for_reserved_bit
   Default value (i.e. ``0`` or ``1``) to use for reserved bits of this record.
@@ -225,6 +294,62 @@ fields
    `scalar_storage_order <scalar_storage_order>` of
    ``most_significant_first``.
 
+.. _Scaled:
+
+Scaled Value (Scaled)
+=====================
+
+Represents a scaled data `Type <Type>` that stores data with a scale factor
+removed.  The logical type and stored data representation may also be
+different.
+
+The following keyword parameters may be used to specify attributes of this
+entity:
+
+as
+  Alias for ``logical_type``.
+
+logical_type
+  The resulting logical data `Type <Type>`.  If this attribute is not
+  specified, it is deduced from the other attributes.
+
+lsb
+  Alias for ``scale_factor``.
+  
+max_value
+  Specifies the maximum possible logical value that can be taken on by an
+  instance of this data type.  The ``max_value`` of the underlying
+  ``representation`` value will differ according to the ``scale_factor``.
+  
+min_value
+  Specifies the minimum possible logical value that can be taken on by an
+  instance of this data type.  The ``min_value`` of the underlying
+  ``representation`` value will differ according to the ``scale_factor``.
+  
+range
+  Specifies the range of possible logical values (i.e. ``min_value`` and
+  ``max_value``) for instances of this data type.  The ``range`` of the
+  underlying ``representation`` value will differ according to the
+  ``scale_factor``.
+  
+representation
+  The physical data `Type <Type>` that will be used to store the value.
+
+scale_factor
+  The scale factor or weighting of the least significant bit of the stored
+  data type.  The stored value is multiplied by this value to determine the
+  logical value of the data.
+  
+The following positional parameters are accepted:
+
+.. table::
+   
+   +-------------------+----------------------------------------------+
+   | Argument Position | Parameter                                    |
+   +===================+==============================================+
+   | 1st               | ``representation``                           |
+   +-------------------+----------------------------------------------+
+   
 .. _Int:
 
 Signed Integer (SInt/Int)
@@ -481,6 +606,35 @@ The following positional parameters are accepted:
    | Argument Position | Parameter                                    |
    +===================+==============================================+
    | 1st               | ``bit_width``                                |
+   +-------------------+----------------------------------------------+
+
+.. _Word-Reversed Value:
+
+Word-Reversed Value
+===================
+
+Data `Type <Type>` that stores the data content for a value in word-reversed
+order.  The data content is broken up into chunks of ``bit_width_of_words``
+bits.  These chunks are stored in reverse order, but the order of the bits
+within a chunk is not reversed.
+
+The following keyword parameters may be used to specify attributes of this
+entity:
+
+bit_width_of_words
+  `Unsigned Integer <UInt>` representing the number of bits in each chunk.
+
+type
+  The `Type <Type>` of data to be stored in word-reversed order.
+  
+The following positional parameters are accepted:
+
+.. table::
+   
+   +-------------------+----------------------------------------------+
+   | Argument Position | Parameter                                    |
+   +===================+==============================================+
+   | 1st               | ``type``                                     |
    +-------------------+----------------------------------------------+
    
 .. _data array:

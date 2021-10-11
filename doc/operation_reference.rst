@@ -7,24 +7,66 @@ Data Operations
 ===============
 
 This section describes the built-in data operations provided by Tydl.  These
-macros are defined in the ``Tydl.Operations`` namespace.
+operations are defined in the ``Tydl.Operations`` namespace.
 
 sum
 ===
 
-Returns the sum of the supplied positional arguments.  The following keyword
-parameters are accepted:
+`Parameterized Entity <Parameterized>` representing the sum of a set of data
+values.
+
+The following keyword parameters may be used to specify attributes of this
+entity:
 
 modulo
-  If this parameter is specified, then the sum will be computed using
-  `modular arithmetic`_ with the modulus being equal to the value of this
-  parameter.
+  Alias for ``modulus``.
+  
+modulus
+  If this `Unsigned Integer <UInt>` attribute is specified, then the sum will
+  be computed using `modular arithmetic`_ with the modulus being equal to the
+  specified value.
+
+of
+  Alias for ``values``.
+
+values
+  List of values to sum.
+
+The following positional parameters are accepted:
+
+.. table::
+   
+   +-------------------+----------------------------------------------+
+   | Argument Position | Parameter                                    |
+   +===================+==============================================+
+   | 1st               | ``values``                                   |
+   +-------------------+----------------------------------------------+
 
 twos_complement
 ===============
 
-Returns the `two's complement`_ of the first positional argument.
+`Parameterized Entity <Parameterized>` representing the `two's complement`_
+of a specified value.
 
+The following keyword parameters may be used to specify attributes of this
+entity:
+
+of
+  Alias for ``value``.
+
+value
+  Value to complement.
+  
+The following positional parameters are accepted:
+
+.. table::
+   
+   +-------------------+----------------------------------------------+
+   | Argument Position | Parameter                                    |
+   +===================+==============================================+
+   | 1st               | ``value``                                    |
+   +-------------------+----------------------------------------------+
+   
 .. _modular arithmetic:
     https://en.wikipedia.org/wiki/Modular_arithmetic
 
