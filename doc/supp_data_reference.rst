@@ -138,7 +138,7 @@ Reserved Field
 ==============
 
 Extension of `Field <Field>` with ``reserved`` set to ``true`` and a ``type``
-of ``Bit-Field Word``.
+of `Bit-Field Word <Bit-Field Word>`.
 
 The following keyword parameters may be used to specify attributes of this
 entity:
@@ -153,7 +153,7 @@ Spare Field
 ===========
 
 Extension of `Field <Field>` with ``spare`` set to ``true`` and a ``type`` of
-``Bit-Field Word``.
+`Bit-Field Word <Bit-Field Word>`.
 
 The following keyword parameters may be used to specify attributes of this
 entity:
