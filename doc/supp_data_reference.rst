@@ -88,19 +88,18 @@ The following positional parameters are accepted:
 Bit Fields
 ==========
 
-Extension of `Field <Field>`, where the ``type`` attribute is a custom
-`Bit-Field Word <Bit-Field Word>` extension that contains additional fields.
+Extension of `Field <Field>`, where the ``type`` attribute is a custom `Word
+<Word>` extension that contains additional fields.
 
 The following keyword parameters may be used to specify attributes of this
 entity:
 
 fields
   Ordered list of key-value pairs that define the additional fields to be
-  appended to the ``Bit-Field Word``.
+  appended to the ``Word``.
 
 bit_width
-  This attribute indicates the ``bit_width`` of the underlying ``Bit-Field
-  Word``.
+  This attribute indicates the ``bit_width`` of the underlying ``Word``.
   
 .. _Layout:
 
@@ -138,14 +137,13 @@ Reserved Field
 ==============
 
 Extension of `Field <Field>` with ``reserved`` set to ``true`` and a ``type``
-of `Bit-Field Word <Bit-Field Word>`.
+of `Word <Word>`.
 
 The following keyword parameters may be used to specify attributes of this
 entity:
 
 bit_width
-  This attribute indicates the ``bit_width`` of the underlying ``Bit-Field
-  Word``.
+  This attribute indicates the ``bit_width`` of the underlying ``Word``.
   
 .. _Spare Field:
 
@@ -153,14 +151,13 @@ Spare Field
 ===========
 
 Extension of `Field <Field>` with ``spare`` set to ``true`` and a ``type`` of
-`Bit-Field Word <Bit-Field Word>`.
+`Word <Word>`.
 
 The following keyword parameters may be used to specify attributes of this
 entity:
 
 bit_width
-  This attribute indicates the ``bit_width`` of the underlying ``Bit-Field
-  Word``.
+  This attribute indicates the ``bit_width`` of the underlying ``Word``.
   
 .. _anonymous union:
     https://en.wikipedia.org/wiki/Union_type#Anonymous_union

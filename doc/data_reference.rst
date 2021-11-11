@@ -62,42 +62,6 @@ Bit
 Primitive data `Type <Type>` representing a single bit.  This is equivalent
 to an `Unsigned Integer <UInt>` with a ``bit_width`` of ``1``.
 
-.. _Bit-Field Word:
-
-Bit-Field Word
-==============
-
-Hybrid `Unsigned Integer <UInt>` / `Bit <Bit>` `Array <Array>` data type with
-some specialized features.  It can be thought of as an extension of `Record
-<Record>` with a single `Field <Field>` named ``Bits``.  A declaration would
-look something like this:
-
-.. code-block:: none
-
-  'Bit-Field Word':  Record
-    fields:
-      Bits: Field
-        type: Array
-          element_type: Bit
-          length: bit_width
-        hidden: true
-
-The ``Bits`` array, however, is indexed according to the applicable
-``bit_numbering`` and ``bit_range_order`` attributes.
-
-In addition to being used as a ``Record``, this data type also can be used as an ``Unsigned Integer``.
-
-The ``text_format`` attribute is also overridden so that ``Bit-Field Word``
-values are shown as hexadecimal unsigned integers by default.
-
-The following keyword parameters may be used to specify attributes of this
-entity:
-
-bit_width
-  Alias for `bit_count <bit_count>`.  This attribute indicates the number of
-  bits used for storage and should be specified for concrete types.  The
-  ``bit_width`` for bit-field words typically ranges from 1 to 64.
-
 .. _Bool:
 
 Boolean Value (Boolean/Bool)
@@ -607,6 +571,42 @@ The following positional parameters are accepted:
    +===================+==============================================+
    | 1st               | ``bit_width``                                |
    +-------------------+----------------------------------------------+
+
+.. _Word:
+
+Word
+====
+
+Hybrid `Unsigned Integer <UInt>` / `Bit <Bit>` `Array <Array>` data type with
+some specialized features.  It can be thought of as an extension of `Record
+<Record>` with a single `Field <Field>` named ``Bits``.  A declaration would
+look something like this:
+
+.. code-block:: none
+
+  Word:  Record
+    fields:
+      Bits: Field
+        type: Array
+          element_type: Bit
+          length: bit_width
+        hidden: true
+
+The ``Bits`` array, however, is indexed according to the applicable
+``bit_numbering`` and ``bit_range_order`` attributes.
+
+In addition to being used as a ``Record``, this data type also can be used as an ``Unsigned Integer``.
+
+The ``text_format`` attribute is also overridden so that ``Word`` values are
+shown as hexadecimal unsigned integers by default.
+
+The following keyword parameters may be used to specify attributes of this
+entity:
+
+bit_width
+  Alias for `bit_count <bit_count>`.  This attribute indicates the number of
+  bits used for storage and should be specified for concrete types.  The
+  ``bit_width`` for words typically ranges from 1 to 64.
 
 .. _Word-Reversed Value:
 
