@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'Tydl'
-copyright = u'2020, 2021 Jeffrey A. Webb / Copyright 2021 NTA, Inc.'
+copyright = u'2020, 2021, 2023 Jeffrey A. Webb / Copyright 2021 NTA, Inc.'
 author = u'Jeffrey A. Webb'
 
 # The short X.Y version
