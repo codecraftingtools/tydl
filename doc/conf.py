@@ -179,7 +179,7 @@ epub_exclude_files = ['search.html']
 
 
 # -- Extension configuration -------------------------------------------------
-intersphinx_mapping = {'cc': ('https://www.codecraftsmen.org', None)}
+intersphinx_mapping = {'cc': ('https://tools.codecraftsmen.org', None)}
 
 extlinks = {
     'github-repo': ('https://github.com/codecraftingtools/tydl/%s',''),

@@ -17,12 +17,12 @@ high-level code from type specifications written in the Tydl syntax.
 `documentation`_ is hosted on `Read the Docs`_ and the `source code`_
 can be found on `GitHub`_.
 
-.. _Tydl: https://www.codecraftsmen.org/software.html#tydl
-.. _Wumps: https://www.codecraftsmen.org/software.html#wumps
+.. _Tydl: https://tools.codecraftsmen.org/software.html#tydl
+.. _Wumps: https://tools.codecraftsmen.org/software.html#wumps
 .. _Code Craftsmen: https://www.codecraftsmen.org
 .. _documentation: https://tydl.readthedocs.io
-.. _Read the Docs: https://www.codecraftsmen.org/foundation.html#read-the-docs
+.. _Read the Docs: https://tools.codecraftsmen.org/foundation.html#read-the-docs
 .. _source code: https://github.com/codecraftingtools/tydl
-.. _GitHub: https://www.codecraftsmen.org/foundation.html#github
+.. _GitHub: https://tools.codecraftsmen.org/foundation.html#github
 
 ..  sphinx-include-summary-end
